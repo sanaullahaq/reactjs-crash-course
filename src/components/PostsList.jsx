@@ -1,28 +1,26 @@
 import Post from "./Post";
 import classes from "./PostsList.module.css";
-import NewPost from "./NewPost";
-import Modal from "./Modal";
 import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
 
-function PostsList({ isPosting, onStopPosting }) {
-  const [posts, setPosts] = useState([]);
-  const [isFetching, setIsFetching] = useState(false)
+function PostsList() {
+  const posts = useLoaderData()
 
   // useEffect() hook is used to minimize the side effect when the components executes.
   // e.g. here when we fetchig the data and changing the state thus the fetching method will run again and cause a infite loop.
   // but the useEffect() hook will be runed based on its dependency here it the empty [] array. so it will run once, does not matter how many times
   // the components runs. the depency can be altered from any where,
   // useEffect() hook function do not expect to return a promise, so async-await used in its inner function
-  useEffect(()=>{
-    async function fetchPosts(){
-      setIsFetching(true)
-      const response = await fetch('http://localhost:8080/posts') //default request type is 'GET'
-      const resData = await response.json()
-      setPosts(resData.posts)
-      setIsFetching(false)
-    }
-    fetchPosts()
-  }, [])
+  // useEffect(()=>{
+  //   async function fetchPosts(){
+  //     setIsFetching(true)
+  //     const response = await fetch('http://localhost:8080/posts') //default request type is 'GET'
+  //     const resData = await response.json()
+  //     setPosts(resData.posts)
+  //     setIsFetching(false)
+  //   }
+  //   fetchPosts()
+  // }, [])
 
   function addPostHandler(postData) {
     fetch('http://localhost:8080/posts', {
@@ -42,30 +40,26 @@ function PostsList({ isPosting, onStopPosting }) {
 
   return (
     <>
-      {isPosting && (
-        <Modal hideModalHandler={onStopPosting}>
-          <NewPost onCancel={onStopPosting} onAddPost={addPostHandler} />
-        </Modal>
-      )}
 
-      {!isFetching && posts.length > 0 && (
+
+      {posts.length > 0 && (
         <ul className={classes.posts}>
           {posts.map((post) => (
             <Post key={post.body} text={post.body} author={post.author} />
           ))}
         </ul>
       )}
-      {!isFetching && posts.length === 0 && (
+      {posts.length === 0 && (
         <div style={{ textAlign: "center", color: "white" }}>
           <h2>There are no posts yet.</h2>
           <p>Start adding some!</p>
         </div>
       )}
-      {isFetching && (
+      {/* {isFetching && (
         <div style={{ textAlign: 'center', color: 'white' }}>
           <p>Loading posts...</p>
         </div>
-      )}
+      )} */}
     </>
   );
 }
