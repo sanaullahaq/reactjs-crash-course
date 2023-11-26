@@ -1,46 +1,39 @@
 import Modal from "../components/Modal";
 import classes from "./NewPost.module.css";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Form, redirect } from "react-router-dom";
 
-function NewPost({onAddPost }) {
-  const [enteredBody, setEnteredBody] = useState("");
-  const [eneteredAuthor, setEnteredAuthor] = useState("");
+function NewPost() {
+  // const [enteredBody, setEnteredBody] = useState("");
+  // const [eneteredAuthor, setEnteredAuthor] = useState("");
 
-  function changeBodyHandler(event) {
-    setEnteredBody(event.target.value);
-  }
+  // function changeBodyHandler(event) {
+  //   setEnteredBody(event.target.value);
+  // }
 
-  function changeAuthorHander(event) {
-    setEnteredAuthor(event.target.value);
-  }
+  // function changeAuthorHander(event) {
+  //   setEnteredAuthor(event.target.value);
+  // }
 
-  function submitHanlder(event) {
-    event.preventDefault(); //This will prevent the browser from sending the HTTP request to the server on submit event
-    const postData = {
-      body: enteredBody,
-      author: eneteredAuthor,
-    };
-    // console.log(postData)
-    onAddPost(postData);
-    // onCancel();
-  }
+  // function submitHanlder(event) {
+  //   event.preventDefault(); //This will prevent the browser from sending the HTTP request to the server on submit event
+  //   const postData = {
+  //     body: enteredBody,
+  //     author: eneteredAuthor,
+  //   };
+  // }
 
   return (
     <Modal>
-      <form className={classes.form} onSubmit={submitHanlder}>
+      {/* The "react-router-dom" Form will stop the browser from default submit request and will execute the action related to the router path in main.jsx file*/}
+      <Form method="post" className={classes.form}>
         <p>
           <label htmlFor="body">Text</label>
-          <textarea id="body" required rows={3} onChange={changeBodyHandler} />
+          <textarea id="body" name="body" required rows={3} />
         </p>
         <p>
           <label htmlFor="name">Your name</label>
-          <textarea
-            type="text"
-            id="body"
-            required
-            onChange={changeAuthorHander}
-          />
+          <textarea type="text" id="body" name="author" required />
         </p>
         <p className={classes.actions}>
           {/* below both button will be worked as submit since both are inside a form.
@@ -53,9 +46,24 @@ function NewPost({onAddPost }) {
           </Link>
           <button>Submit</button>
         </p>
-      </form>
+      </Form>
     </Modal>
   );
 }
 
 export default NewPost;
+
+export async function action({request}) { //data.request
+  const formData = await request.formData()
+  const postData = Object.fromEntries(formData) // this will generate {body: '...', author: '...'}
+  await fetch("http://localhost:8080/posts", {
+    method: "POST",
+    body: JSON.stringify(postData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return redirect('/')
+
+}

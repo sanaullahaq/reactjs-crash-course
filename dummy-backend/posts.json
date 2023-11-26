@@ -1,10 +1,1 @@
-{
-  "posts": [
-    { "body": "Testing", "author": "Sana", "id": "0.2256254154240671" },
-    {
-      "body": "This course is hopefully very helpful to you!",
-      "author": "Sanaulla",
-      "id": "post-1"
-    }
-  ]
-}
+{"posts":[{"body":"test","author":"abc","id":"0.2341984634772083"},{"body":"Test Test Test","author":"Sanaulla Haq","id":"0.5766313685547868"},{"body":"Testing","author":"Sana","id":"0.2256254154240671"},{"body":"This course is hopefully very helpful to you!","author":"Sanaulla","id":"post-1"}]}

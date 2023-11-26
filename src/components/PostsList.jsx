@@ -22,21 +22,21 @@ function PostsList() {
   //   fetchPosts()
   // }, [])
 
-  function addPostHandler(postData) {
-    fetch('http://localhost:8080/posts', {
-      method: 'POST',
-      body: JSON.stringify(postData),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    setPosts((existingPosts) => [postData, ...existingPosts]);
+  // function addPostHandler(postData) {
+  //   fetch('http://localhost:8080/posts', {
+  //     method: 'POST',
+  //     body: JSON.stringify(postData),
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   })
+  //   setPosts((existingPosts) => [postData, ...existingPosts]);
     // inside the setPosts() we can diretly spread the list,
-    // but it not sure that setPosts() will be called instantly whent he stage is changed,
+    // but it not sure that setPosts() will be called instantly when the stage is changed,
     // there might a small delay or something like that,
     // so it is better approach to use ()=> inside setPosts() to supress that issue.
-    console.log(posts);
-  }
+  //   console.log(posts);
+  // }
 
   return (
     <>
@@ -45,7 +45,7 @@ function PostsList() {
       {posts.length > 0 && (
         <ul className={classes.posts}>
           {posts.map((post) => (
-            <Post key={post.body} text={post.body} author={post.author} />
+            <Post key={post.id} id={post.id} body={post.body} author={post.author} />
           ))}
         </ul>
       )}
